@@ -1,9 +1,9 @@
 from django.http import JsonResponse
 from .models import Customer
 from .serializers import CustomerSerializer
-from rest_framework.decorators import api_view
+from rest_framework.decorators import api_view, permission_classes
 from rest_framework.response import Response
-
+from rest_framework.permissions import IsAuthenticated
 
 @api_view(['GET', 'POST'])
 def user_list(request):
@@ -19,7 +19,9 @@ def user_list(request):
         return Response(serializer.errors, status=400)
 
 
+
 @api_view(['GET', 'POST', 'PUT', 'DELETE'])
+@permission_classes([IsAuthenticated])
 def user_detail(request, pk):
     try:
         user = Customer.objects.get(pk=pk)
